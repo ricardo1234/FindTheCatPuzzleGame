@@ -1,0 +1,95 @@
+﻿@page "/weather"
+@using FindTheCat.Brain
+@using FindTheCat.Brain.Enums
+@rendermode InteractiveServer
+
+<PageTitle>Weather</PageTitle>
+
+<h1>Weather</h1>
+
+<p>This component demonstrates showing data.</p>
+<ul>
+    @foreach (var item in updatesMessages.Split(splitString, StringSplitOptions.RemoveEmptyEntries))
+    {
+    } 
+</ul>
+
+<button class="btn btn-primary" @onclick="StartGame">Começar</button>
+
+<div class="gameBox">
+    @if (currentGame == null)
+    {
+        <p><em>Waiting to start...</em></p>
+    }
+    else if (currentGame.GameState == Brain.Enums.GameStates.Ended)
+    {
+        <p style="font-size:100px;font-weight:bold;"><em>Voce encontrou o GATO parabéns!!</em></p>
+    }
+    else
+    {
+        for (int i = 0; i < currentGame.BoxState.Count; i++)
+        {
+            int currentIndex = i;
+            string catInTheBox = currentGame.BoxState[i] == BoxStates.Cat ? "cat" : "empty";
+            <div @onclick="@(() => BoxChoosen(currentIndex))" class="catBox @catInTheBox">#@i</div>
+        }
+    }
+</div>
+@code {
+    private WeatherForecast[]? forecasts;
+    private string updatesMessages = "";
+    private string splitString = "$%";
+
+    private void AddGameLog(string log)
+    {
+        updatesMessages += $"{splitString}{log}";
+    }
+
+    private Task PlayerFinderTurn()
+    {
+        _ = InvokeAsync(async () =>
+        {
+            AddGameLog("Player's turn, good luck.");
+            StateHasChanged();
+        });
+
+        return Task.CompletedTask;
+    }
+
+    Game currentGame;
+
+    private void StartGame()
+    {
+        currentGame.StartGame();
+        AddGameLog("Game Started");
+    }
+
+    private void BoxChoosen(int box)
+    {
+        AddGameLog("Player choose: #" + box);
+        currentGame.PlayerMove(box);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        currentGame = new Game(new Brain.Models.Settings()
+            {
+                Cat = Brain.Enums.PlayerTypes.Computer,
+                Finder = Brain.Enums.PlayerTypes.Human,
+                Dificulty = Brain.Enums.Dificulty.Random,
+                NumOfBoxs = 5
+            },
+            playerFinderTurn: PlayerFinderTurn);
+
+        AddGameLog("Game initialized.");
+    }
+
+    private class WeatherForecast
+    {
+        public DateOnly Date { get; set; }
+        public int TemperatureC { get; set; }
+        public string? Summary { get; set; }
+        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    }
+}

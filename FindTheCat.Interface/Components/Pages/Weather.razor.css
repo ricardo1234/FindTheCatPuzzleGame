@@ -1,0 +1,27 @@
+﻿.gameBox {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.catBox {
+    display: flex;
+    background-color: lightslategray;
+    width: 20%;
+    margin: 2px;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 1 / 1;
+    border: 1px solid black;
+    color: white;
+    font-size: 60px;
+}
+
+.catBox:hover{
+    cursor:pointer;
+}
+
+.cat{
+    background-color:antiquewhite;
+}
