@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace FindTheCat.Brain.Models.Computer;
+﻿namespace FindTheCat.Brain.Models.Computer;
 
 public sealed class ComputerBrain
 {
@@ -17,7 +15,7 @@ public sealed class ComputerBrain
         switch (_settings.Dificulty)
         {
             case Enums.Dificulty.Random:
-                return RandomMove(place);
+                return _settings.Type == Enums.ComputerType.Cat ? RandomCatMove(place) : RandomFinderMove();
             case Enums.Dificulty.Algorithm:
                 break;
             case Enums.Dificulty.Cheating:
@@ -28,7 +26,7 @@ public sealed class ComputerBrain
         return 0;
     }
 
-    private int RandomMove(int? place)
+    private int RandomCatMove(int? place)
     {
         if (place == null)
             return _random.Next(0, _settings.NumOfBox);
@@ -39,9 +37,11 @@ public sealed class ComputerBrain
         if (place == _settings.NumOfBox - 1)
             return _settings.NumOfBox - 2;
 
-        if (_random.Next(0, 1) == 0)
+        if (_random.Next(0, 2) == 0)
             return (int)--place;
 
         return (int)++place;
     }
+
+    private int RandomFinderMove() => _random.Next(0, _settings.NumOfBox);
 }
