@@ -18,15 +18,11 @@ How can you go about this hide and seek game to ensure you find the cat?
 	- Cheating (Let the cat see what box you will peek next).
 * Technical Specs:
     - Library with all game logic.
-	- Use events on the library to update the UI.
-	- UI multi-platform.
 
 ## Used Technologies
 
-* GitHub Desktop;
 * GitHub;
-* Git;
 * Markdown;
 * Visual Studio;
-* .Net MAUI;
-* .Net 6.
+* Razor Pages;
+* .Net 9.
